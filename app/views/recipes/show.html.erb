@@ -1,12 +1,25 @@
-<h1 align="center">Recipe Name: <%= @recipe.name.capitalize %></h1>
-<hr />
+<%= render 'shared/page_title', title: @recipe.name %>
+
 <div class="well col-md-8 col-md-offset-2">
-  <h4 class="center description"><strong>Description:</strong></h4>
+  <h4 class="center description"><strong>Steps:</strong></h4>
     <hr />
-    <%= @recipe.description %>
-    <p>Created by: </p>
-    <p>
-      <small><%= @recipe.user.username %></small>
-      <div class="pull-right">created: <%= time_ago_in_words(@recipe.created_at) %></div>
-    </p>
+    <%= simple_format(@recipe.description) %>
+    <hr />
+    <div class="pull-right">
+      <p class="center">
+        <em>Created by:</em>
+       </p>
+       <p class="center">
+            <%= link_to gravatar_for(@recipe.user), recipes_path %>
+        </p>
+        <p class="center">
+          <small><%= @recipe.user.username.capitalize %></small>
+            <div class="pull-right"><%= time_ago_in_words(@recipe.created_at) %> ago
+            </div>
+        </p>
+    </div>
+    <div class = "recipe-actions">
+        <%= link_to "Edit recipe", edit_recipe_path(@recipe), class: "btn btn-xs btn-warning" %>
+        <%= link_to "Delete recipe", recipe_path(@recipe), method: :delete, data: {confirm: "Are you sure?"}, class: "btn btn-xs btn-danger" %>
+    </div>
 </div>
