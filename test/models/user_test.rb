@@ -69,4 +69,12 @@ class UserTest < ActiveSupport::TestCase
         @user.password = @user.password_confirmation = "x" * 4
         assert_not @user.valid?
     end
+
+    test "associated recipes should be destroyed" do
+        @user.save
+        @user.recipes.create!(name: "testing destroy", description: "Testing destroy function")
+        assert_difference 'Recipe.count', -1 do
+            @user.destroy
+        end
+    end
 end

@@ -4,10 +4,7 @@ class UsersTestTest < ActionDispatch::IntegrationTest
     
    def setup
         @user = User.create!(username: "Dick", email: "dick@steveadamson.com", password: "password",                                      password_confirmation: "password")
-        @user2 = User.create(username: "Bob", email: "bob@steveadamson.com", password: "password",                                        password_confirmation: "password")
-        @recipe = Recipe.create(name: "Vegetables", description: "Great vegetables", user: @user)
-        @recipe2 = @user.recipes.build(name: "Meat", description: "Great meats")
-        @recipe2.save
+        @user2 = User.create!(username: "Bob", email: "bob@steveadamson.com", password: "password",                                        password_confirmation: "password")
     end  
     
   test "index valid" do
@@ -18,7 +15,18 @@ class UsersTestTest < ActionDispatch::IntegrationTest
    test "get listing" do
        get users_path
        assert_template 'users/index'
-       assert_match @user.username, response.body
+       assert_select "a[href=?]", user_path(@user), text: @user.username.capitalize
+       assert_select "a[href=?]", user_path(@user2), text: @user2.username.capitalize
    end
+    
+   test "should delete user" do
+       get users_path
+        assert_template 'users/index'
+        assert_difference 'User.count', -1 do
+          delete user_path(@user2)
+        end
+        assert_redirected_to users_path
+        assert_not flash.empty?
+    end 
       
 end
