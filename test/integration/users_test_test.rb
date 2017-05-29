@@ -20,10 +20,11 @@ class UsersTestTest < ActionDispatch::IntegrationTest
    end
     
    test "should delete user" do
-       get users_path
+        sign_in_as(@user, "password")
+        get users_path
         assert_template 'users/index'
         assert_difference 'User.count', -1 do
-          delete user_path(@user2)
+          delete user_path(@user)
         end
         assert_redirected_to users_path
         assert_not flash.empty?

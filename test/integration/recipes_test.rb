@@ -47,7 +47,8 @@ class RecipesTest < ActionDispatch::IntegrationTest
     end
     
     test "Reject invalid recipe" do
-         get new_recipe_path
+        sign_in_as(@user, "password")
+        get new_recipe_path
         assert_template 'recipes/new'
         assert_no_difference 'Recipe.count' do
            post recipes_path, params: { recipe: {name: "", description: ""} }
