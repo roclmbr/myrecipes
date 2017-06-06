@@ -5,10 +5,11 @@ class CommentsController < ApplicationController
    def create
       @recipe = Recipe.find(params[:recipe_id]) 
       @comment = @recipe.comments.build(comment_params)
-       @comment.user = current_user
+      @comment.user = current_user
        if @comment.save
-           flash[:success]="Comment saved"
-           redirect_to recipe_path(@recipe)
+           ActionCable.server.broadcast "comments", render(partial: 'comments/comment', object: @comment)
+           #flash[:success]="Comment saved"
+           #redirect_to recipe_path(@recipe)
        else
            flash[:danger]="Comment failed to save"
            redirect_to :back

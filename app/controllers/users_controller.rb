@@ -16,7 +16,8 @@ class UsersController < ApplicationController
        @user = User.new(user_params)
         if @user.save
           session[:user_id] = @user.id
-          flash[:success] = "Welcome #{@user.username} to MyRecipes App!" 
+          cookies.signed[:user_id] = @user.id
+                    flash[:success] = "Welcome #{@user.username} to MyRecipes App!" 
           redirect_to user_path(@user)
         else
           render 'new'
